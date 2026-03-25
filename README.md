@@ -108,10 +108,9 @@ intellisched/
 ---
 
 ## 👥 Team
-
- Member 
-
-1. Aman Kumar 
-2. Rohit Sharma 
-3. Aswadh B Pramod 
+|      Member       |         Profile Link          |
+|-------------------|-------------------------------|
+|1. Aman Kumar      |https://github.com/amanmaurya39|
+|2. Rohit Sharma    |https://github.com/Rohit-lpu-ai|
+|3. Aswadh B Pramod |https://github.com/aswwadhh    |
 
