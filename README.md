@@ -47,7 +47,7 @@ python app.py
 ```
 
 ### Open Frontend
-Open `templates/index.html` in your browser, or access via `http://127.0.0.1:5000`
+Open `index.html` in your browser, or access via `http://127.0.0.1:5000`
 
 ### Run Tests
 ```bash
@@ -82,8 +82,7 @@ Health check.
 ```
 intellisched/
 ├── app.py                    ← Flask API + all schedulers (Module 1)
-├── templates/
-│   └── index.html            ← Frontend UI (Module 2 & 3)
+├── index.html                ← Frontend UI (Module 2 & 3)
 ├── tests/
 │   └── test_schedulers.py    ← Pytest unit tests
 ├── requirements.txt
@@ -98,6 +97,8 @@ intellisched/
 - ✅ Animated Gantt chart with per-process timeline rows
 - ✅ Performance metrics: Avg WT, Avg TAT, CPU Utilization, Throughput
 - ✅ Process result table with completion/waiting/turnaround breakdown
+- ✅ Live Simulation with real-time visualization, play/pause/step controls, and dynamic speed adjustment
+- ✅ Priority Column Toggle with smart algorithm detection (auto-enables for priority-based algorithms)
 - ✅ AI Insights: fairness analysis, starvation detection, algorithm recommendation
 - ✅ Side-by-side comparison of all 7 algorithms on the same process set
 - ✅ 4 preset scenarios (Basic, Convoy Effect, Starvation, Burst Mix)
