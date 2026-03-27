@@ -78,7 +78,7 @@ header{
 }
 .chip-green{background:rgba(15,239,180,.1);color:var(--g);border:1px solid rgba(15,239,180,.25);}
 .chip-blue{background:rgba(91,140,255,.1);color:var(--b);border:1px solid rgba(91,140,255,.25);}
-.chip-anim::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--g);margin-right:5px;animation:blink 1.8s ease infinite;}
+.chip-anim::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--r);margin-right:5px;animation:blink 1.8s ease infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
 
 /* ── LAYOUT ──────────────────────────────── */
@@ -248,6 +248,7 @@ header{
 .tab:hover{color:var(--text);}
 .tab.on{color:var(--g);border-bottom-color:var(--g);}
 .tab-icon{font-size:.9rem;}
+.tab:nth-child(2) .tab-icon{filter:hue-rotate(345deg) saturate(1.5);}
 
 .pane{flex:1;overflow-y:auto;padding:24px;display:none;
   scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
@@ -595,7 +596,7 @@ header{
     <div class="brand-badge">⚙</div>
     <div>
       <div class="brand-name">Intelligent CPU Scheduler Simulator</div>
-      <div class="brand-sub">CSE250 · CA2 · Intelligent CPU Scheduler Simulator</div>
+      <div class="brand-sub">Real-time CPU scheduling simulation with intelligent insights.</div>
     </div>
   </div>
   <div class="header-chips">
@@ -611,7 +612,7 @@ header{
 
   <!-- Algorithm Select — MODULE 1 -->
   <div class="sb-sec">
-    <div class="sec-head">Module 1 · Algorithm Engine</div>
+    <div class="sec-head">Algorithm Engine</div>
     <div class="algo-wrap">
       <button class="ab on" id="ab-fcfs" onclick="setAlgo('fcfs')">FCFS<span class="stag">Non-Preemptive</span></button>
       <button class="ab"    id="ab-sjf"  onclick="setAlgo('sjf')">SJF<span class="stag">Non-Preemptive</span></button>
@@ -635,7 +636,7 @@ header{
 
   <!-- Process Manager — MODULE 2 -->
   <div class="sb-sec">
-    <div class="sec-head" style="margin-bottom:8px;">Module 2 · Process Manager</div>
+    <div class="sec-head" style="margin-bottom:8px;">Process Manager</div>
     <div style="display:flex;gap:6px;margin-bottom:10px;align-items:center;">
       <button id="priority-toggle-btn" style="flex:1;padding:6px 8px;background:var(--border);border:1px solid var(--border2);border-radius:6px;color:var(--mute);font-family:'JetBrains Mono',monospace;font-size:.65rem;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.5px;font-weight:600;" onclick="togglePriority()" title="Toggle priority column visibility">▼ Priority</button>
     </div>
@@ -667,45 +668,19 @@ header{
     </div>
   </div>
 
-  <!-- Module Legend -->
-  <div class="sb-sec">
-    <div class="sec-head">Project Modules</div>
-    <div class="module-strip">
-      <div class="mod-badge">
-        <div class="mod-num" style="background:rgba(15,239,180,.15);color:var(--g);">M1</div>
-        <div class="mod-info">
-          <div class="mod-title">Scheduling Engine</div>
-          <div class="mod-sub">Python backend · 7 algorithms</div>
-        </div>
-      </div>
-      <div class="mod-badge">
-        <div class="mod-num" style="background:rgba(91,140,255,.15);color:var(--b);">M2</div>
-        <div class="mod-info">
-          <div class="mod-title">Process Manager</div>
-          <div class="mod-sub">Input · Validation · State</div>
-        </div>
-      </div>
-      <div class="mod-badge">
-        <div class="mod-num" style="background:rgba(194,109,255,.15);color:var(--p);">M3</div>
-        <div class="mod-info">
-          <div class="mod-title">Visualization & AI</div>
-          <div class="mod-sub">Gantt · Metrics · Insights</div>
-        </div>
-      </div>
-    </div>
-  </div>
+
 </div>
 
 <!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
 <div class="main">
   <div class="tabs">
-    <div class="tab on"  onclick="switchTab('gantt',this)"><span class="tab-icon">📊</span>Gantt Chart</div>
-    <div class="tab"     onclick="switchTab('progress',this)"><span class="tab-icon">▶️</span>Live Simulation</div>
-    <div class="tab"     onclick="switchTab('metrics',this)"><span class="tab-icon">📈</span>Metrics</div>
-    <div class="tab"     onclick="switchTab('table',this)"><span class="tab-icon">📋</span>Process Table</div>
-    <div class="tab"     onclick="switchTab('ai',this)"><span class="tab-icon">🤖</span>AI Insights</div>
-    <div class="tab"     onclick="switchTab('compare',this)"><span class="tab-icon">⚖️</span>Compare All</div>
-    <div class="tab"     onclick="switchTab('report',this)"><span class="tab-icon">📄</span>Project Report</div>
+    <div class="tab on"  onclick="switchTab('gantt',this)"><span class="tab-icon">▭</span>Gantt Chart</div>
+    <div class="tab"     onclick="switchTab('progress',this)"><span class="tab-icon">⚡</span>Live Simulation</div>
+    <div class="tab"     onclick="switchTab('metrics',this)"><span class="tab-icon">◈</span>Metrics</div>
+    <div class="tab"     onclick="switchTab('table',this)"><span class="tab-icon">▦</span>Process Table</div>
+    <div class="tab"     onclick="switchTab('ai',this)"><span class="tab-icon">★</span>AI Insights</div>
+    <div class="tab"     onclick="switchTab('compare',this)"><span class="tab-icon">≡</span>Compare All</div>
+    <div class="tab"     onclick="switchTab('report',this)"><span class="tab-icon">◐</span>Project Report</div>
   </div>
 
   <!-- GANTT -->
@@ -819,36 +794,9 @@ header{
       </div>
     </div>
 
-    <!-- 2. Module-Wise Breakdown -->
+    <!-- 2. Functionalities -->
     <div class="report-section">
-      <div class="rep-h2">2. Module-Wise Breakdown</div>
-      <div class="rep-body">
-        The project is divided into three well-defined modules:
-        <br><br>
-        <strong>Module 1 — Scheduling Algorithm Engine (Python Backend):</strong>
-        This module forms the core computation layer. It implements all seven scheduling algorithms in Python as
-        independent classes, each extending a base <code>Scheduler</code> abstract class. Input is a list of
-        <code>Process</code> objects carrying arrival time, burst time, and priority. Output is a structured
-        <code>ScheduleResult</code> containing the Gantt log, per-process completion/waiting/turnaround times,
-        and aggregate statistics. This module is exposed via a Flask REST API at <code>/api/schedule</code>.
-        <br><br>
-        <strong>Module 2 — Process Manager (Frontend Input Layer):</strong>
-        Handles all process creation, validation, and state management in JavaScript. Users can add/remove
-        processes, adjust parameters, select algorithms, set time quantum, and load preset scenarios.
-        Input validation ensures burst times are ≥1 and arrival times are ≥0. This module communicates with
-        Module 1 by packaging process data as JSON and sending POST requests to the Flask API.
-        <br><br>
-        <strong>Module 3 — Visualization and AI Insights Engine (Frontend Output Layer):</strong>
-        Renders simulation output in five interactive views — Gantt chart with per-process rows and combined CPU
-        timeline, performance metrics dashboard, per-process result table, AI insights with starvation analysis
-        and algorithm recommendations, and an all-algorithm comparison chart. The AI insights layer uses heuristic
-        rules to analyze variance, CPU utilization, fairness, and process mix to recommend optimal algorithms.
-      </div>
-    </div>
-
-    <!-- 3. Functionalities -->
-    <div class="report-section">
-      <div class="rep-h2">3. Functionalities</div>
+      <div class="rep-h2">2. Functionalities</div>
       <div class="rep-body">
         <strong>Module 1 — Algorithm Engine:</strong> Implements FCFS (sort by arrival time, sequential execution),
         SJF (greedy shortest burst selection from ready queue), SRTF (unit-time preemption based on remaining time),
