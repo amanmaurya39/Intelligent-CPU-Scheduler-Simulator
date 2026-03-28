@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -342,7 +343,7 @@ def calc_metrics(res, ps):
 
 @app.route('/')
 def index():
-    return render_template('intellisched_simulator.html')
+    return send_file(os.path.join(os.path.dirname(__file__), 'index.html'))
 
 @app.route('/api/schedule', methods=['POST'])
 def schedule():

@@ -584,11 +584,232 @@ header{
 .sim-metric-val{font-size:1.6rem;font-weight:700;line-height:1;color:var(--bright);}
 .sim-metric-unit{font-size:.62rem;color:var(--mute);margin-left:3px;font-weight:400;}
 .sim-metric-sub{font-size:.6rem;color:var(--dim);margin-top:4px;}
+
+/* ── COMPLETION CHARACTER ──────────────── */
+#completion-wrapper {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.4s ease;
+}
+#completion-container {
+  position: relative;
+  width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: float-anim 2.6s ease-in-out infinite;
+}
+@keyframes float-anim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+#completion-bubble {
+  position: absolute;
+  top: 6px;
+  left: calc(110px + 4px);
+  background: #fff;
+  color: #111;
+  font-size: .8rem;
+  padding: 8px 14px;
+  border-radius: 12px;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: 0.3s;
+  white-space: nowrap;
+  font-weight: 600;
+}
+#completion-bubble.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.char-shadow {
+  width: 60%;
+  height: 8px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+/* ──────── TOAST NOTIFICATIONS ──────── */
+#toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+}
+.toast {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--g);
+  border-radius: 8px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  animation: slideInToast 0.3s ease-out forwards;
+  font-size: .85rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toast.success { border-left-color: var(--g); }
+.toast.error { border-left-color: var(--r); }
+.toast.warning { border-left-color: var(--y); }
+.toast.info { border-left-color: var(--b); }
+@keyframes slideInToast {
+  from { transform: translateX(400px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOutToast {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(400px); opacity: 0; }
+}
+.toast.removing {
+  animation: slideOutToast 0.3s ease-in forwards;
+}
+
+/* ──────── THEME TOGGLE ──────── */
+.theme-toggle {
+  background: var(--border);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s;
+}
+.theme-toggle:hover {
+  background: var(--border2);
+  box-shadow: 0 0 12px rgba(15,239,180,0.2);
+}
+
+/* ──────── LIGHT THEME ──────── */
+html[data-theme="light"] {
+  --ink:     #ffffff;
+  --ink2:    #f5f5f5;
+  --panel:   #efefef;
+  --border:  #e0e0e0;
+  --border2: #d0d0d0;
+  --dim:     #a0a0a0;
+  --mute:    #707070;
+  --text:    #1a1a1a;
+  --bright:  #000000;
+}
+
+/* ──────── MOBILE RESPONSIVE ──────── */
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 280px 1fr;
+  }
+  .sidebar {
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .sidebar {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 66px;
+    width: 100%;
+    height: calc(100vh - 66px);
+    z-index: 99;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar.active {
+    display: flex;
+  }
+  header {
+    padding: 10px 16px;
+  }
+  .header-chips {
+    gap: 4px;
+  }
+  .chip {
+    font-size: .5rem;
+    padding: 3px 8px;
+  }
+  .brand-name {
+    font-size: 1rem;
+  }
+  .brand-sub {
+    font-size: .5rem;
+  }
+  #toast-container {
+    bottom: 10px;
+    right: 10px;
+    max-width: calc(100% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-badge {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  .brand-name {
+    font-size: .9rem;
+  }
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+}
 </style>
 </head>
 <body>
-</head>
-<body>
+
+<!-- COMPLETION CHARACTER -->
+<div id="completion-wrapper">
+  <div id="completion-container">
+    <div id="completion-bubble">🎉 Simulation Done!</div>
+    <svg viewBox="0 0 120 130" width="110">
+      <ellipse cx="60" cy="46" rx="38" ry="40" fill="#3d2314"/>
+      <rect x="49" y="88" width="22" height="18" rx="6" fill="#f5c5a3"/>
+      <ellipse cx="60" cy="58" rx="34" ry="36" fill="#f5c5a3"/>
+      <ellipse cx="60" cy="28" rx="34" ry="18" fill="#3d2314"/>
+      <ellipse cx="60" cy="23" rx="30" ry="14" fill="#5c3317"/>
+      <ellipse cx="27" cy="50" rx="7" ry="12" fill="#3d2314"/>
+      <ellipse cx="93" cy="50" rx="7" ry="12" fill="#3d2314"/>
+      <ellipse cx="26" cy="58" rx="6" ry="8" fill="#f5c5a3"/>
+      <ellipse cx="94" cy="58" rx="6" ry="8" fill="#f5c5a3"/>
+      <circle cx="49" cy="53" r="6" fill="#5b3a8c"/>
+      <circle cx="73" cy="53" r="6" fill="#5b3a8c"/>
+      <circle cx="50" cy="53.5" r="3.5" fill="#000"/>
+      <circle cx="74" cy="53.5" r="3.5" fill="#000"/>
+      <ellipse cx="60" cy="65" rx="4" ry="3" fill="#e8a07a"/>
+      <path d="M47 74 Q60 85 73 74" stroke="#d4856a" fill="none"/>
+      <ellipse cx="38" cy="68" rx="8" ry="5" fill="#f09090" opacity=".35"/>
+      <ellipse cx="82" cy="68" rx="8" ry="5" fill="#f09090" opacity=".35"/>
+      <ellipse cx="60" cy="22" rx="35" ry="14" fill="#FFFC00"/>
+      <rect x="25" y="22" width="70" height="10" rx="4" fill="#FFFC00"/>
+      <path d="M26 108 Q60 98 94 108 L94 130 L26 130 Z" fill="#5b3a8c"/>
+    </svg>
+    <div class="char-shadow"></div>
+  </div>
+</div>
+
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div id="toast-container"></div>
 
 <!-- HEADER -->
 <header>
@@ -602,7 +823,8 @@ header{
   <div class="header-chips">
     <div class="chip chip-anim chip-green">Live</div>
     <div class="chip chip-blue">Python · Flask · JS</div>
-    <div class="chip chip-green">LPU CSE</div>
+    <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle dark/light mode">🌙</button>
+    <button class="theme-toggle" id="mobile-menu-btn" onclick="toggleMobileSidebar()" title="Toggle menu" style="display:none;">☰</button>
   </div>
 </header>
 
@@ -966,6 +1188,92 @@ const DESCS = {
   mlfq: 'MLFQ — 3-level queue: Q1 (RR q=2), Q2 (RR q=4), Q3 (FCFS). Adapts to CPU-burst behaviour automatically. Most intelligent.'
 };
 
+// ══════════════════════════════════════════
+//  UTILITY FUNCTIONS
+// ══════════════════════════════════════════
+
+// TOAST NOTIFICATIONS
+function showToast(message, type = 'info', duration = 3000) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  
+  const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+  toast.innerHTML = `<span>${icons[type]}</span><span>${message}</span>`;
+  
+  container.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.classList.add('removing');
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+}
+
+// SOUND EFFECTS
+function playCompletionSound() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const now = audioCtx.currentTime;
+  
+  // Create a pleasant beep sound
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  
+  osc.frequency.setValueAtTime(800, now);
+  osc.frequency.exponentialRampToValueAtTime(1000, now + 0.1);
+  
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+  
+  osc.start(now);
+  osc.stop(now + 0.15);
+}
+
+// THEME TOGGLE
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.getElementById('theme-toggle-btn');
+  const currentTheme = html.getAttribute('data-theme') || 'dark';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  html.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  btn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+  
+  showToast(`Switched to ${newTheme} mode`, 'info', 2000);
+}
+
+// MOBILE SIDEBAR TOGGLE
+function toggleMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.toggle('active');
+}
+
+// LOAD THEME FROM STORAGE
+function loadTheme() {
+  const saved = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  const btn = document.getElementById('theme-toggle-btn');
+  if(btn) btn.textContent = saved === 'dark' ? '🌙' : '☀️';
+}
+
+// SHOW/HIDE MOBILE MENU BUTTON
+function updateMenuButton() {
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  if(window.innerWidth <= 768) {
+    menuBtn.style.display = 'flex';
+  } else {
+    menuBtn.style.display = 'none';
+    document.querySelector('.sidebar').classList.remove('active');
+  }
+}
+
+window.addEventListener('resize', updateMenuButton);
+updateMenuButton();
+loadTheme();
+
 window.onload = () => { loadPreset('basic'); resetPlayback(); };
 
 // ══════════════════════════════════════════
@@ -1010,10 +1318,12 @@ function switchTab(id, el) {
 function addProc(at=0, bt=4, pr=1) {
   procs.push({id:pidCnt++, at, bt, pr});
   renderTable();
+  showToast(`Process P${pidCnt-1} added (AT=${at}, BT=${bt})`, 'success', 2000);
 }
 function removeProc(id) {
   procs = procs.filter(p=>p.id!==id);
   renderTable();
+  showToast(`Process P${id} removed`, 'info', 1500);
 }
 function updateProc(id, field, v) {
   const p = procs.find(x=>x.id===id);
@@ -1093,19 +1403,26 @@ function runAlgo(a, ps, q){ if(a==='fcfs')return fcfs(ps); if(a==='sjf')return s
 //  RUN
 // ══════════════════════════════════════════
 function run() {
-  if(!procs.length){ alert('Add at least one process!'); return; }
+  if(!procs.length){ 
+    showToast('⚠ Add at least one process to run!', 'warning');
+    return;
+  }
   const q = +document.getElementById('quantum').value || 2;
   const result = runAlgo(algo, procs.map(p=>({...p})), q);
   ganttLog = result.log;
   maxPlaybackTime = ganttLog.reduce((m,e)=>Math.max(m,e.end), 0);
   playbackTime = 0;
   renderAll(result, procs, algo, q);
-  // Old playback functions - commented out since we use new simulation engine
-  // renderPlaybackLanes(procs, 0);
-  // renderCPUTimeline(ganttLog, 0, maxPlaybackTime);
-  // updatePlaybackMetrics({}, procs, 0);
+  showToast(`✓ ${algo.toUpperCase()} simulation executed (${procs.length} processes)`, 'success', 2500);
 }
-function resetAll(){ pidCnt=1; procs=[]; loadPreset('basic'); clearOutputs(); resetPlayback(); }
+function resetAll(){ 
+  pidCnt=1; 
+  procs=[]; 
+  loadPreset('basic'); 
+  clearOutputs(); 
+  resetPlayback(); 
+  showToast('Reset to default preset', 'info', 2000);
+}
 function resetPlayback(){
   isPlaying=false;
   playbackTime=0;
@@ -1209,6 +1526,7 @@ function togglePlayback(){
         isPlaying=false;
         clearInterval(playbackTimer);
         document.getElementById('play-btn').textContent='▶ Play';
+        showCompletionCharacter();
       }
       document.getElementById('time-display').textContent = playbackTime;
       renderPlaybackLanes(procs, playbackTime);
@@ -1237,6 +1555,30 @@ function updateSpeed(){
     clearInterval(playbackTimer);
     togglePlayback();
   }
+}
+
+// ─── COMPLETION CHARACTER ───
+function showCompletionCharacter(){
+  const wrapper = document.getElementById('completion-wrapper');
+  const bubble = document.getElementById('completion-bubble');
+  
+  // Play success sound and show toast
+  playCompletionSound();
+  showToast('🎉 Simulation completed successfully!', 'success', 4000);
+  
+  wrapper.style.left = '50%';
+  wrapper.style.transform = 'translateY(0) translateX(-50%)';
+  
+  setTimeout(() => {
+    bubble.classList.add("visible");
+  }, 600);
+  
+  setTimeout(() => {
+    bubble.classList.remove("visible");
+    setTimeout(() => {
+      wrapper.style.transform = 'translateY(-100%) translateX(-50%)';
+    }, 500);
+  }, 3500);
 }
 
 function renderPlaybackLanes(ps, time){
@@ -1742,6 +2084,7 @@ function simTogglePlay(){
         btn.textContent='▶ Play';
         btn.classList.remove('play-active');
         clearInterval(simTimer);
+        showCompletionCharacter();
       }
       simRenderFrame(simT);
     }, simSpeedMs);
