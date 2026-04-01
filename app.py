@@ -5,6 +5,8 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+SUPPORTED_ALGORITHMS = {'fcfs', 'sjf', 'srtf', 'rr', 'priority', 'pp', 'mlfq'}
+
 def _merge_log_entries(log):
     """Merge consecutive identical process entries in gantt log"""
     if not log:
@@ -341,13 +343,61 @@ def calc_metrics(res, ps):
         'tp': round(tp, 3)
     }
 
+def _is_number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+def _validate_schedule_payload(data):
+    if not isinstance(data, dict):
+        return False, 'Request body must be a JSON object.'
+
+    algo_name = data.get('algorithm', 'fcfs')
+    procs = data.get('processes', [])
+    quantum = data.get('quantum', 4)
+
+    if algo_name not in SUPPORTED_ALGORITHMS:
+        return False, f'Unsupported algorithm: {algo_name}'
+
+    if not isinstance(procs, list):
+        return False, 'processes must be a list.'
+
+    for idx, proc in enumerate(procs):
+        if not isinstance(proc, dict):
+            return False, f'Process at index {idx} must be an object.'
+
+        for field in ('id', 'at', 'bt'):
+            if field not in proc:
+                return False, f"Process at index {idx} is missing '{field}'."
+
+        if not _is_number(proc['id']):
+            return False, f"Process at index {idx} has invalid 'id'."
+        if not _is_number(proc['at']) or proc['at'] < 0:
+            return False, f"Process at index {idx} has invalid 'at'."
+        if not _is_number(proc['bt']) or proc['bt'] <= 0:
+            return False, f"Process at index {idx} has invalid 'bt'."
+
+        if algo_name in ('priority', 'pp'):
+            if 'pr' not in proc:
+                return False, f"Process at index {idx} is missing 'pr' for priority scheduling."
+            if not _is_number(proc['pr']):
+                return False, f"Process at index {idx} has invalid 'pr'."
+
+    if algo_name == 'rr':
+        if not _is_number(quantum) or quantum <= 0:
+            return False, 'quantum must be a positive number for Round Robin.'
+
+    return True, None
+
 @app.route('/')
 def index():
     return send_file(os.path.join(os.path.dirname(__file__), 'index.html'))
 
 @app.route('/api/schedule', methods=['POST'])
 def schedule():
-    data = request.json
+    data = request.get_json(silent=True)
+    is_valid, validation_error = _validate_schedule_payload(data)
+    if not is_valid:
+        return jsonify({'error': validation_error}), 400
+
     algo_name = data.get('algorithm', 'fcfs')
     procs = data.get('processes', [])
     q = data.get('quantum', 4)
